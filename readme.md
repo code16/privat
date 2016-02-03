@@ -9,6 +9,12 @@ It is meant for websites in a staging state.
 
 <code>composer require dvlpp/privat</code>
 
+### Add Privat Service Provider
+
+Add the followinf line in the 'provider' section of your config/app.php file:
+
+<code>\Dvlpp\Privat\PrivatServiceProvider::class</code>
+
 ### Add Privat middleware in your project
 
 Add the following line at the end of the $middleware array of the app/Http/Kernel file:

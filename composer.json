@@ -20,7 +20,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Dvlpp\\Private\\": "src/Dvlpp/Private/"
+      "Dvlpp\\Privat\\": "src/Dvlpp/Privat/"
     }
   },
   "autoload-dev": {
