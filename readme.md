@@ -11,13 +11,13 @@ It is meant for websites in a staging state.
 
 ### Add Privat Service Provider
 
-Add the following line in the 'provider' section of your config/app.php file:
+Add the following line in the <code>providers</code> section of your <code>config/app.php</code> file:
 
 <code>\Dvlpp\Privat\PrivatServiceProvider::class</code>
 
 ### Add Privat middleware in your project
 
-Add the following line at the end of the $middleware array of the app/Http/Kernel file:
+Add the following line at the end of the <code>$middleware</code> array of the <code>app/Http/Kernel</code> file:
 
 <code>\Dvlpp\Privat\PrivatMiddleware::class</code>
 
@@ -27,18 +27,12 @@ First create the privat config file:
 
 <code>php artisan vendor:publish --provider="Dvlpp\Privat\PrivatServiceProvider"</code>
 
-And then edit the new <code>/config/privat.php</code> accordingly (nothing fancy),
-or even better: add this keys in your .env file:
+And then edit the new <code>/config/privat.php</code> accordingly (nothing fancy);
+or, even better, add this keys in your <code>.env</code> file:
 
-- PRIVAT_RESTRICTED
-- PRIVAT_PASSWORD
-
-### Activate / Deactivate the package
-
-You can of course change the value of the <code>restricted</code> config item for that.
-If you want to deactivate this feature for a long time, you can also comment the
-Middleware class in your app/Http/Kernel file.
+- PRIVAT_RESTRICTED=true
+- PRIVAT_PASSWORD=mypassword
 
 ### License
 
-[WTFPL](https://fr.wikipedia.org/wiki/WTFPL)
+[WTFPL](https://en.wikipedia.org/wiki/WTFPL)
