@@ -3,6 +3,8 @@
 Private is a very simple password protection for Laravel projects.
 It's useful for websites in a staging state.
 
+[Privat form](http://i.imgur.com/jz7TTmS.png)
+
 ## Usage
 
 ### Install with composer
