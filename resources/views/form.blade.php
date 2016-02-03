@@ -8,35 +8,44 @@
             padding: 0;
             width: 100%;
             height: 100%;
-            color: #B0BEC5;
-            display: table;
+            background-color: #c7ced4;
+            color: #738492;
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-weight: 100;
+            font-size:19px;
         }
 
         .container {
+            height: 100%;
+            display: table;
             text-align: center;
-            max-width: 500px;
-            margin:70px auto;
+            margin: 0 auto;
+        }
+
+        .content {
+            display: table-cell;
+            vertical-align: middle;
         }
 
         .title {
             font-size: 24px;
             margin-bottom: 20px;
-            font-weight: 100;
         }
 
         input[type=password] {
-            padding:5px 10px;
-            font-size:24px;
-            font-weight: 100;
-            border:1px solid #aaa;
+            padding:10px;
+            font-size:18px;
+            font-weight: 200;
+            border:1px solid #859aaa;
             margin-top:20px;
+            width: 100%;
+            text-align: center;
+            border-radius: 3px;
         }
 
         .message {
             color:red;
-            font-weight: bold;
-            margin:10px 0;
+            font-weight: normal;
         }
 
     </style>
@@ -45,13 +54,14 @@
 <div class="container">
     <div class="content">
         <div class="title">{{ trans("privat::ui.form_title") }}</div>
-        <p>{{ trans("privat::ui.form_help") }}</p>
 
         @if(session("message"))
-            <div class="message">{{ session("message") }}</div>
+            <p class="message">{{ session("message") }}</p>
+        @else
+            <p>{{ trans("privat::ui.form_help") }}</p>
         @endif
 
-        <form action="{{ url("privat/form") }}" method="post">
+        <form action="{{ url("privat") }}" method="post">
             {{ csrf_field() }}
 
             <input type="password" name="password" placeholder="{{ trans("privat::ui.form_field_placeholder") }}">

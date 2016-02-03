@@ -2,7 +2,7 @@
 
 Route::group(['middleware' => 'web'], function () {
 
-    Route::get('/privat/form', function () {
+    Route::get('/privat', function () {
         if (!config("privat.restricted")) {
             return redirect("/");
         }
@@ -10,7 +10,7 @@ Route::group(['middleware' => 'web'], function () {
         return view("privat::form");
     });
 
-    Route::post('/privat/form', function (Illuminate\Http\Request $request) {
+    Route::post('/privat', function (Illuminate\Http\Request $request) {
         if (!config("privat.restricted")) {
             return redirect("/");
         }
@@ -22,7 +22,7 @@ Route::group(['middleware' => 'web'], function () {
         }
 
         return redirect()
-            ->to("/privat/form")
+            ->to("/privat")
             ->with("message", trans("privat::ui.invalid_password_message"));
     });
 

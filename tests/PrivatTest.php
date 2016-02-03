@@ -19,9 +19,9 @@ class PrivatTest extends TestCase
         $this->app['config']->set('privat.restricted', true);
         $this->app['config']->set('privat.password', 'aaa');
 
-        $this->post('/privat/form', ["password" => "bbb"]);
+        $this->post('/privat', ["password" => "bbb"]);
 
-        $this->assertRedirectedTo('/privat/form');
+        $this->assertRedirectedTo('/privat');
     }
 
     /** @test */
@@ -30,7 +30,7 @@ class PrivatTest extends TestCase
         $this->app['config']->set('privat.restricted', true);
         $this->app['config']->set('privat.password', 'aaa');
 
-        $this->post('/privat/form', ["password" => "aaa"]);
+        $this->post('/privat', ["password" => "aaa"]);
 
         $this->assertRedirectedTo('/');
 
@@ -53,7 +53,7 @@ class PrivatTest extends TestCase
     {
         $this->app['config']->set('privat.restricted', false);
 
-        $this->visit('/privat/form')
+        $this->visit('/privat')
             ->dontSee(trans("privat::ui.form_title"));
     }
 }
