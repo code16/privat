@@ -21,7 +21,9 @@ Route::group(['middleware' => 'web'], function () {
             return redirect()->intended('/');
         }
 
-        return redirect()->back()->with("message", trans("privat::ui.invalid_password_message"));
+        return redirect()
+            ->to("/privat/form")
+            ->with("message", trans("privat::ui.invalid_password_message"));
     });
 
 });
