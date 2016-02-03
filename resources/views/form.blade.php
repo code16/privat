@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Version protégée</title>
+    <title>{{ trans("privat::ui.page_title") }}</title>
 
     <style>
         body {
@@ -44,8 +44,8 @@
 <body>
 <div class="container">
     <div class="content">
-        <div class="title">Ce site est en version beta</div>
-        <p>Saisissez votre mot de passe pour y accéder</p>
+        <div class="title">{{ trans("privat::ui.form_title") }}</div>
+        <p>{{ trans("privat::ui.form_help") }}</p>
 
         @if(session("message"))
             <div class="message">{{ session("message") }}</div>
@@ -54,7 +54,7 @@
         <form action="{{ url("privat/form") }}" method="post">
             {{ csrf_field() }}
 
-            <input type="password" name="password" placeholder="Password">
+            <input type="password" name="password" placeholder="{{ trans("privat::ui.form_field_placeholder") }}">
 
         </form>
 

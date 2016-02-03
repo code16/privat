@@ -21,7 +21,7 @@ Route::group(['middleware' => 'web'], function () {
             return redirect()->intended('/');
         }
 
-        return redirect()->back()->with("message", "Invalid password");
+        return redirect()->back()->with("message", trans("privat::ui.invalid_password_message"));
     });
 
 });
