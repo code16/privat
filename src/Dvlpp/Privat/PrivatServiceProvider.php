@@ -26,7 +26,7 @@ class PrivatServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__ . '/../../../resources/lang', 'privat');
 
         // Include Privat's routes.php file
-        include __DIR__ . '/../../private-routes.php';
+        include __DIR__ . '/../../privat-routes.php';
     }
 
     /**
