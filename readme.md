@@ -33,3 +33,12 @@ or even better: add this keys in your .env file:
 - PRIVAT_RESTRICTED
 - PRIVAT_PASSWORD
 
+### Activate / Deactivate the package
+
+You can of course change the value of the <code>restricted</code> config item for that.
+If you want to deactivate this feature for a long time, you can also comment the
+Middleware class in your app/Http/Kernel file.
+
+### License
+
+[WTFPL](https://fr.wikipedia.org/wiki/WTFPL)
