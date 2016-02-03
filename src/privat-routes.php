@@ -1,22 +1,27 @@
 <?php
 
-Route::get('/privat/form', function() {
-    if(!config("privat.restricted")) {
-        return redirect("/");
-    }
+Route::group(['middleware' => 'web'], function () {
 
-    return view("privat::login");
-});
+    Route::get('/privat/form', function () {
+        if (!config("privat.restricted")) {
+            return redirect("/");
+        }
 
-Route::post('/privat/form', function(Illuminate\Http\Request $request) {
-    if(!config("privat.restricted")) {
-        return redirect("/");
-    }
+        return view("privat::form");
+    });
 
-    if(config("privat.password") && $request->get("password") === config("privat.password")) {
-        session()->put("privat_key", true);
-        return redirect()->intended('/');
-    }
+    Route::post('/privat/form', function (Illuminate\Http\Request $request) {
+        if (!config("privat.restricted")) {
+            return redirect("/");
+        }
 
-    return redirect()->back()->with("message", "Invalid password");
+        if (config("privat.password") && $request->get("password") === config("privat.password")) {
+            session()->put("privat_key", true);
+
+            return redirect()->intended('/');
+        }
+
+        return redirect()->back()->with("message", "Invalid password");
+    });
+
 });

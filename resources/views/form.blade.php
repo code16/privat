@@ -42,23 +42,23 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="content">
-            <div class="title">Ce site est en version beta</div>
-            <p>Saisissez votre mot de passe pour y accéder</p>
+<div class="container">
+    <div class="content">
+        <div class="title">Ce site est en version beta</div>
+        <p>Saisissez votre mot de passe pour y accéder</p>
 
-            @if(session()->has("message"))
-                <div class="message">{{ session("message") }}</div>
-            @endif
+        @if(session("message"))
+            <div class="message">{{ session("message") }}</div>
+        @endif
 
-            <form action="{{ url("privat/form") }}" method="post">
-                {{ csrf_field() }}
+        <form action="{{ url("privat/form") }}" method="post">
+            {{ csrf_field() }}
 
-                <input type="password" name="pwd" placeholder="Password">
+            <input type="password" name="password" placeholder="Password">
 
-            </form>
+        </form>
 
-        </div>
     </div>
+</div>
 </body>
 </html>
