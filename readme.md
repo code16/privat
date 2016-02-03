@@ -27,4 +27,9 @@ First create the privat config file:
 
 <code>php artisan vendor:publish --provider="Dvlpp\Privat\PrivatServiceProvider"</code>
 
-And then edit the new <code>/config/privat.php</code> accordingly (nothing fancy).
+And then edit the new <code>/config/privat.php</code> accordingly (nothing fancy),
+or even better: add this keys in your .env file:
+
+- PRIVAT_RESTRICTED
+- PRIVAT_PASSWORD
+
