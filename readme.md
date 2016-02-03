@@ -1,7 +1,7 @@
 # Privat
 
-Private is a very simple password gate for a Laravel project.
-It is meant for websites in a staging state.
+Private is a very simple password protection for Laravel projects.
+It's useful for websites in a staging state.
 
 ## Usage
 
@@ -33,6 +33,12 @@ or, even better, add this keys in your <code>.env</code> file:
 - PRIVAT_RESTRICTED=true
 - PRIVAT_PASSWORD=mypassword
 
-### License
+## How does it work
+
+Quite simple: if the given password is correct, Privat sets a session property,
+and look for it on each request. So, obviously, Privat won't work on
+non session based systems (an API for instance).
+
+## License
 
 [WTFPL](https://en.wikipedia.org/wiki/WTFPL)
