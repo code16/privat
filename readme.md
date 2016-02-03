@@ -11,7 +11,7 @@ It is meant for websites in a staging state.
 
 ### Add Privat Service Provider
 
-Add the followinf line in the 'provider' section of your config/app.php file:
+Add the following line in the 'provider' section of your config/app.php file:
 
 <code>\Dvlpp\Privat\PrivatServiceProvider::class</code>
 
@@ -23,3 +23,8 @@ Add the following line at the end of the $middleware array of the app/Http/Kerne
 
 ### Set Privat config
 
+First create the privat config file:
+
+<code>php artisan vendor:publish --provider="Dvlpp\Privat\PrivatServiceProvider"</code>
+
+And then edit the new <code>/config/privat.php</code> accordingly (nothing fancy).
