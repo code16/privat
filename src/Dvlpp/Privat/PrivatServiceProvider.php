@@ -19,7 +19,7 @@ class PrivatServiceProvider extends ServiceProvider
     {
         // Publish config
         $this->publishes([
-            __DIR__ . '/../../../config/resources/privat.php' => config_path('privat.php')
+            __DIR__ . '/../../../resources/privat.php' => config_path('privat.php')
         ], 'config');
 
         $this->loadViewsFrom(__DIR__ . '/../../../resources/views', 'privat');
