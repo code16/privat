@@ -6,6 +6,9 @@ return [
     "restricted" => env("PRIVAT_RESTRICTED", false),
 
     // Choose a good Privat password
-    "password" => env("PRIVAT_PASSWORD", "")
+    "password" => env("PRIVAT_PASSWORD", ""),
+
+    // Urls excluded
+    "except" => []
 
 ];

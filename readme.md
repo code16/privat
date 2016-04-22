@@ -35,6 +35,9 @@ or, even better, add this keys in your <code>.env</code> file:
 - PRIVAT_RESTRICTED=true
 - PRIVAT_PASSWORD=mypassword
 
+The final config param is `except`, which is meant to contain
+an array of excluded urls (those url won't be protected by Privat).
+
 ## How does it work
 
 Quite simple: if the given password is correct, Privat sets a session property,
