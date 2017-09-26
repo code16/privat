@@ -1,9 +1,10 @@
 <?php
 
-
 use Dvlpp\Privat\PrivatMiddleware;
 
-abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
+use Laravel\BrowserKitTesting\TestCase as BaseTestCase;
+
+abstract class TestCase extends BaseTestCase
 {
     public function setUp()
     {
