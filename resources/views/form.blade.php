@@ -1,6 +1,7 @@
 <html>
 <head>
     <title>{{ trans("privat::ui.page_title") }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <style>
         body {
@@ -20,11 +21,13 @@
             display: table;
             text-align: center;
             margin: 0 auto;
+            padding: 0 1em;
         }
 
         .content {
             display: table-cell;
             vertical-align: middle;
+            margin: 1em;
         }
 
         .title {

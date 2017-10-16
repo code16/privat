@@ -11,7 +11,7 @@ It's useful for websites in a staging state.
 
 <code>composer require dvlpp/privat</code>
 
-### Add Privat Service Provider
+### Add Privat Service Provider (except for Laravel 5.5+)
 
 Add the following line in the <code>providers</code> section of your <code>config/app.php</code> file:
 
@@ -29,14 +29,16 @@ First create the privat config file:
 
 <code>php artisan vendor:publish --provider="Dvlpp\Privat\PrivatServiceProvider"</code>
 
-And then edit the new <code>/config/privat.php</code> accordingly (nothing fancy);
-or, even better, add this keys in your <code>.env</code> file:
+And then edit the new <code>/config/privat.php</code> accordingly (nothing fancy), 
+or even better, add this keys in your <code>.env</code> file:
 
 - PRIVAT_RESTRICTED=true
 - PRIVAT_PASSWORD=mypassword
 
-The final config param is `except`, which is meant to contain
-an array of excluded urls (those url won't be protected by Privat).
+### Exceptions
+
+The `except` config param is meant to contain an array of excluded urls 
+(those url won't be protected by Privat).
 
 ## How does it work
 
