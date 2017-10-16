@@ -2,7 +2,6 @@
 
 namespace Dvlpp\Privat;
 
-use Dvlpp\Merx\Console\MigrateDb;
 use Illuminate\Support\ServiceProvider;
 
 class PrivatServiceProvider extends ServiceProvider
@@ -19,14 +18,14 @@ class PrivatServiceProvider extends ServiceProvider
     {
         // Publish config
         $this->publishes([
-            __DIR__ . '/../../../resources/privat.php' => config_path('privat.php')
+            __DIR__ . '/../resources/privat.php' => config_path('privat.php')
         ], 'config');
 
-        $this->loadViewsFrom(__DIR__ . '/../../../resources/views', 'privat');
-        $this->loadTranslationsFrom(__DIR__ . '/../../../resources/lang', 'privat');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'privat');
+        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'privat');
 
         // Include Privat's routes.php file
-        include __DIR__ . '/../../privat-routes.php';
+        include __DIR__ . '/../routes/privat-routes.php';
     }
 
     /**
