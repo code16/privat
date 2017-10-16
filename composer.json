@@ -28,5 +28,12 @@
     "classmap": [
       "tests/TestCase.php"
     ]
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Dvlpp\\Privat\\PrivatServiceProvider"
+      ]
+    }
   }
 }
