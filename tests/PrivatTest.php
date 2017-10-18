@@ -56,4 +56,48 @@ class PrivatTest extends TestCase
         $this->visit('/privat')
             ->dontSee(trans("privat::ui.form_title"));
     }
+
+    /** @test */
+    public function we_get_the_waiting_page_when_privat_is_on_and_we_defined_a_waiting_page()
+    {
+        $this->app['config']->set([
+            'privat' => [
+                'restricted' => true,
+                'waiting_view' => 'test::waiting'
+            ]
+        ]);
+
+        $this->app['view']->addNamespace("test", __DIR__ . '/fixtures/views');
+
+        $this->visit('/')
+            ->see('Waiting page');
+    }
+
+    /** @test */
+    public function we_get_the_privat_form_even_with_a_waiting_page_on_the_privat_url()
+    {
+        $this->app['config']->set([
+            'privat' => [
+                'restricted' => true,
+                'waiting_view' => 'test::waiting'
+            ]
+        ]);
+
+        $this->visit('/privat')
+            ->see(trans("privat::ui.form_title"));
+    }
+
+    /** @test */
+    public function we_dont_get_the_waiting_page_when_privat_is_off()
+    {
+        $this->app['config']->set([
+            'privat' => [
+                'restricted' => false,
+                'waiting_view' => 'test::waiting'
+            ]
+        ]);
+
+        $this->visit('/')
+            ->dontSee('Waiting page');
+    }
 }

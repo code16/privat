@@ -14,21 +14,51 @@ class PrivatMiddleware
      */
     public function handle($request, \Closure $next)
     {
-        if(
-            config("privat.restricted")
-            && !session()->has("privat_key")
-            && !$this->shouldPassThrough($request)
-        ) {
+        if(!$this->isPrivatUrl($request) && $this->isPrivatProtected($request)) {
+
+            if($this->hasWaitingPage()) {
+                return redirect('/privat_waiting');
+            }
+
             session()->put('url.intended', $request->url());
+
             return redirect('/privat');
         }
 
         return $next($request);
     }
 
+    protected function isPrivatUrl($request)
+    {
+        return $request->is('privat');
+    }
+
+    /**
+     * @param $request
+     * @return bool
+     */
+    protected function isPrivatProtected($request)
+    {
+        return config("privat.restricted")
+            && !session()->has("privat_key")
+            && !$this->shouldPassThrough($request);
+    }
+
+    /**
+     * @return bool
+     */
+    protected function hasWaitingPage()
+    {
+        return !!config("privat.waiting_view");
+    }
+
+    /**
+     * @param $request
+     * @return bool
+     */
     protected function shouldPassThrough($request)
     {
-        if($request->is('privat')) {
+        if($this->hasWaitingPage() && $request->is("privat_waiting")) {
             return true;
         }
 

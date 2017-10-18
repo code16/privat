@@ -26,4 +26,12 @@ Route::group(['middleware' => 'web'], function () {
             ->with("message", trans("privat::ui.invalid_password_message"));
     });
 
+    Route::get('/privat_waiting', function () {
+        if (!config("privat.waiting_view")) {
+            return redirect("/");
+        }
+
+        return view(config("privat.waiting_view"));
+    });
+
 });

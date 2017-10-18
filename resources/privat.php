@@ -8,6 +8,9 @@ return [
     // Choose a good Privat password
     "password" => env("PRIVAT_PASSWORD", ""),
 
+    // If you want a public waiting page, type its view name here
+    "waiting_view" => false,
+
     // Urls excluded
     "except" => []
 
