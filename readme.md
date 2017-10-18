@@ -1,7 +1,6 @@
 # Privat
 
-Private is a very simple password protection for Laravel projects.
-It's useful for websites in a staging state.
+Private is a very simple password protection for Laravel projects. It's useful for websites in a staging state.
 
 ![Screenshot](http://i.imgur.com/jz7TTmS.png)
 
@@ -9,28 +8,30 @@ It's useful for websites in a staging state.
 
 ### Install with composer
 
-<code>composer require code16/privat</code>
+    composer require code16/privat
 
 ### Add Privat Service Provider (except for Laravel 5.5+)
 
-Add the following line in the <code>providers</code> section of your <code>config/app.php</code> file:
+Add the following line in the `providers` section of your `config/app.php` file:
 
-<code>\Dvlpp\Privat\PrivatServiceProvider::class</code>
+    \Code16\Privat\PrivatServiceProvider::class
 
 ### Add Privat middleware in your project
 
-Add the following line at the end of the <code>$middleware</code> array of the <code>app/Http/Kernel</code> file:
+Add the following middleware in your project configuration. 
 
-<code>\Dvlpp\Privat\PrivatMiddleware::class</code>
+    \Code16\Privat\PrivatMiddleware::class
+
+Typically, you can add it at the end of the `'web'` key in your `$middlewareGroups` array (in `app/Http/Kernel`).
+
 
 ### Set Privat config
 
 First create the privat config file:
 
-<code>php artisan vendor:publish --provider="Dvlpp\Privat\PrivatServiceProvider"</code>
+    php artisan vendor:publish --provider="Code16\Privat\PrivatServiceProvider"
 
-And then edit the new <code>/config/privat.php</code> accordingly (nothing fancy), 
-or even better, add this keys in your <code>.env</code> file:
+And then edit the new `/config/privat.php` accordingly (nothing fancy), or even better, add this keys in your `.env` file:
 
 - PRIVAT_RESTRICTED=true
 - PRIVAT_PASSWORD=mypassword
@@ -38,13 +39,19 @@ or even better, add this keys in your <code>.env</code> file:
 ### Exceptions
 
 The `except` config param is meant to contain an array of excluded urls 
-(those url won't be protected by Privat).
+(those urls won't be protected by Privat).
+
+### Waiting page
+
+If you need to present a public waiting page, here's how: set the waiting page view name in the `waiting_view` config key (in `config/privat.php`):
+
+    "waiting_view" => "demo.waiting"
+
+From then, all requests without the Privat registration will be redirected to `/privat_waiting` which will render the configured view, except `/privat`, which will still present the Privat form.
 
 ## How does it work
 
-Quite simple: if the given password is correct, Privat sets a session property,
-and look for it on each request. So, obviously, Privat won't work on
-non session based systems (an API for instance).
+Quite simple: if the given password is correct, Privat sets a session property, and look for it on each request. So, obviously, Privat won't work on non session based systems (an API for instance).
 
 ## License
 
