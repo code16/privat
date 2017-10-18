@@ -1,9 +1,9 @@
 {
-  "name": "dvlpp/privat",
+  "name": "code16/privat",
   "description": "Simple private access package for Laravel.",
   "authors": [{
     "name": "Philippe Lonchampt",
-    "email": "philippelonchampt@gmail.com"
+    "email": "philippe@code16.fr"
   }],
   "license": "MIT",
   "type": "project",
@@ -21,7 +21,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Dvlpp\\Privat\\": "src/"
+      "Code16\\Privat\\": "src/"
     }
   },
   "autoload-dev": {
@@ -32,7 +32,7 @@
   "extra": {
     "laravel": {
       "providers": [
-        "Dvlpp\\Privat\\PrivatServiceProvider"
+        "Code16\\Privat\\PrivatServiceProvider"
       ]
     }
   }

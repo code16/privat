@@ -1,7 +1,6 @@
 <?php
 
-use Dvlpp\Privat\PrivatMiddleware;
-
+use Code16\Privat\PrivatMiddleware;
 use Laravel\BrowserKitTesting\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
@@ -20,7 +19,7 @@ abstract class TestCase extends BaseTestCase
     {
         $app = require __DIR__ . '/../vendor/laravel/laravel/bootstrap/app.php';
 
-        $app->register(\Dvlpp\Privat\PrivatServiceProvider::class);
+        $app->register(\Code16\Privat\PrivatServiceProvider::class);
 
         $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 

@@ -9,7 +9,7 @@ It's useful for websites in a staging state.
 
 ### Install with composer
 
-<code>composer require dvlpp/privat</code>
+<code>composer require code16/privat</code>
 
 ### Add Privat Service Provider (except for Laravel 5.5+)
 

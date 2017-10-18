@@ -1,6 +1,6 @@
 <?php
 
-namespace Dvlpp\Privat;
+namespace Code16\Privat;
 
 class PrivatMiddleware
 {
