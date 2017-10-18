@@ -1,6 +1,6 @@
 # Privat
 
-Private is a very simple password protection for Laravel projects. It's useful for websites in a staging state.
+Privat is a very simple password protection for Laravel projects. It's useful for websites in a staging state.
 
 ![Screenshot](http://i.imgur.com/jz7TTmS.png)
 
@@ -31,15 +31,14 @@ First create the privat config file:
 
     php artisan vendor:publish --provider="Code16\Privat\PrivatServiceProvider"
 
-And then edit the new `/config/privat.php` accordingly (nothing fancy), or even better, add this keys in your `.env` file:
+And then edit the new `/config/privat.php` accordingly (nothing fancy); you can handle it with this keys in your `.env` file:
 
 - PRIVAT_RESTRICTED=true
 - PRIVAT_PASSWORD=mypassword
 
 ### Exceptions
 
-The `except` config param is meant to contain an array of excluded urls 
-(those urls won't be protected by Privat).
+The `except` config param is meant to contain an array of excluded urls (those urls won't be protected by Privat).
 
 ### Waiting page
 
