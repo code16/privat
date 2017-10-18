@@ -55,4 +55,4 @@ Quite simple: if the given password is correct, Privat sets a session property, 
 
 ## License
 
-[WTFPL](https://en.wikipedia.org/wiki/WTFPL)
+MIT
