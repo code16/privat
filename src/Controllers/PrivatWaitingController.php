@@ -7,7 +7,7 @@ class PrivatWaitingController
 
     public function index()
     {
-        if (!config("privat.waiting_view")) {
+        if (!config("privat.restricted") || !config("privat.waiting_view")) {
             return redirect("/");
         }
 
