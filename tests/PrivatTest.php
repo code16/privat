@@ -100,4 +100,18 @@ class PrivatTest extends TestCase
         $this->visit('/')
             ->dontSee('Waiting page');
     }
+
+    /** @test */
+    public function we_cant_reach_get_the_waiting_page_when_privat_is_off()
+    {
+        $this->app['config']->set([
+            'privat' => [
+                'restricted' => false,
+                'waiting_view' => 'test::waiting'
+            ]
+        ]);
+
+        $this->visit('/privat_waiting')
+            ->dontSee(trans("privat::ui.form_title"));
+    }
 }
