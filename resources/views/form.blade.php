@@ -68,6 +68,7 @@
             {{ csrf_field() }}
 
             <input type="password" name="password" placeholder="{{ trans("privat::ui.form_field_placeholder") }}">
+            <button type="submit">{{ trans("privat::ui.button_text") }}</button>
 
         </form>
 

@@ -27,7 +27,7 @@ abstract class TestCase extends BaseTestCase
             PrivatMiddleware::class
         );
 
-        $app['config']->set('app.key', str_random(32));
+        $app['config']->set('app.key', \Str::random(32));
 
         return $app;
     }
