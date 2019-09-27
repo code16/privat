@@ -62,12 +62,18 @@ class PrivatMiddleware
             return true;
         }
 
-        foreach ((array)config('privat.except') as $except) {
-            if ($except !== '/') {
-                $except = trim($except, '/');
+        foreach(explode(",", config('privat.except.hosts', "")) as $exceptedHost) {
+            if($request->getHttpHost() == $exceptedHost) {
+                return true;
+            }
+        }
+
+        foreach(explode(",", config('privat.except.urls', "")) as $exceptedUrl) {
+            if ($exceptedUrl !== '/') {
+                $exceptedUrl = trim($exceptedUrl, '/');
             }
 
-            if ($request->is($except)) {
+            if ($request->is($exceptedUrl)) {
                 return true;
             }
         }
