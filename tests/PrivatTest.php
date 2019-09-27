@@ -1,16 +1,20 @@
 <?php
 
+namespace Code16\Privat\Tests;
+
+use Illuminate\Support\Facades\Route;
+
 class PrivatTest extends TestCase
 {
-    protected $baseUrl = 'http://localhost:1234';
 
     /** @test */
     public function we_get_the_form_page_when_privat_is_on()
     {
         $this->app['config']->set('privat.restricted', true);
 
-        $this->visit('/')
-            ->see(trans("privat::ui.form_title"));
+        $this->followingRedirects()
+            ->get('/')
+            ->assertSee(trans("privat::ui.form_title"));
     }
 
     /** @test */
@@ -19,9 +23,8 @@ class PrivatTest extends TestCase
         $this->app['config']->set('privat.restricted', true);
         $this->app['config']->set('privat.password', 'aaa');
 
-        $this->post('/privat', ["password" => "bbb"]);
-
-        $this->assertRedirectedTo('/privat');
+        $this->post('/privat', ["password" => "bbb"])
+            ->assertRedirect('/privat');
     }
 
     /** @test */
@@ -30,12 +33,12 @@ class PrivatTest extends TestCase
         $this->app['config']->set('privat.restricted', true);
         $this->app['config']->set('privat.password', 'aaa');
 
-        $this->post('/privat', ["password" => "aaa"]);
+        $this->post('/privat', ["password" => "aaa"])
+            ->assertRedirect('/');
 
-        $this->assertRedirectedTo('/');
-
-        $this->visit('/')
-            ->dontSee(trans("privat::ui.form_title"));
+        $this->followingRedirects()
+            ->get('/')
+            ->assertDontSee(trans("privat::ui.form_title"));
     }
 
     /** @test */
@@ -43,18 +46,19 @@ class PrivatTest extends TestCase
     {
         $this->app['config']->set('privat.restricted', false);
 
-        $this->visit('/')
-            ->dontSee(trans("privat::ui.form_title"));
+        $this->followingRedirects()
+            ->get('/')
+            ->assertDontSee(trans("privat::ui.form_title"));
     }
-
 
     /** @test */
     public function we_cant_see_the_privat_form_when_privat_is_off()
     {
         $this->app['config']->set('privat.restricted', false);
 
-        $this->visit('/privat')
-            ->dontSee(trans("privat::ui.form_title"));
+        $this->followingRedirects()
+            ->get('/privat')
+            ->assertDontSee(trans("privat::ui.form_title"));
     }
 
     /** @test */
@@ -69,8 +73,9 @@ class PrivatTest extends TestCase
 
         $this->app['view']->addNamespace("test", __DIR__ . '/fixtures/views');
 
-        $this->visit('/')
-            ->see('Waiting page');
+        $this->followingRedirects()
+            ->get('/')
+            ->assertSee('Waiting page');
     }
 
     /** @test */
@@ -83,8 +88,9 @@ class PrivatTest extends TestCase
             ]
         ]);
 
-        $this->visit('/privat')
-            ->see(trans("privat::ui.form_title"));
+        $this->followingRedirects()
+            ->get('/privat')
+            ->assertSee(trans("privat::ui.form_title"));
     }
 
     /** @test */
@@ -97,8 +103,9 @@ class PrivatTest extends TestCase
             ]
         ]);
 
-        $this->visit('/')
-            ->dontSee('Waiting page');
+        $this->followingRedirects()
+            ->get('/')
+            ->assertDontSee('Waiting page');
     }
 
     /** @test */
@@ -111,7 +118,50 @@ class PrivatTest extends TestCase
             ]
         ]);
 
-        $this->visit('/privat_waiting')
-            ->dontSee(trans("privat::ui.form_title"));
+        $this->followingRedirects()
+            ->get('/privat_waiting')
+            ->assertDontSee(trans("privat::ui.form_title"));
+    }
+
+    /** @test */
+    public function we_can_exclude_urls_from_privat()
+    {
+        $this->app['config']->set([
+            'privat' => [
+                'restricted' => true,
+                'except' => [
+                    'urls' => '/test,/test2'
+                ]
+            ]
+        ]);
+
+        Route::get('/test', function() { return ""; });
+        Route::get('/test2', function() { return ""; });
+        Route::get('/test3', function() { return ""; });
+
+        $this->get('/')->assertRedirect('/privat');
+        $this->get('/test')->assertStatus(200);
+        $this->get('/test2')->assertStatus(200);
+        $this->get('/test3')->assertRedirect('/privat');
+    }
+
+    /** @test */
+    public function we_can_exclude_hosts_from_privat()
+    {
+        $this->app['config']->set([
+            'privat' => [
+                'restricted' => true,
+                'except' => [
+                    'hosts' => 'opened.test,opened2.test'
+                ]
+            ]
+        ]);
+
+        Route::get('/', function() { return ""; });
+
+        $this->get('http://localhost')->assertRedirect("/privat");
+        $this->get('http://some-host.com')->assertRedirect("/privat");
+        $this->get('http://opened.test')->assertStatus(200);
+        $this->get('http://opened2.test')->assertStatus(200);
     }
 }
