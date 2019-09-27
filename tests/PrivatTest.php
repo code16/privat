@@ -1,16 +1,18 @@
 <?php
 
+namespace Code16\Privat\Tests;
+
 class PrivatTest extends TestCase
 {
-    protected $baseUrl = 'http://localhost:1234';
 
     /** @test */
     public function we_get_the_form_page_when_privat_is_on()
     {
         $this->app['config']->set('privat.restricted', true);
 
-        $this->visit('/')
-            ->see(trans("privat::ui.form_title"));
+        $this->followingRedirects()
+            ->get('/')
+            ->assertSee(trans("privat::ui.form_title"));
     }
 
     /** @test */
@@ -19,9 +21,8 @@ class PrivatTest extends TestCase
         $this->app['config']->set('privat.restricted', true);
         $this->app['config']->set('privat.password', 'aaa');
 
-        $this->post('/privat', ["password" => "bbb"]);
-
-        $this->assertRedirectedTo('/privat');
+        $this->post('/privat', ["password" => "bbb"])
+            ->assertRedirect('/privat');
     }
 
     /** @test */
@@ -30,12 +31,12 @@ class PrivatTest extends TestCase
         $this->app['config']->set('privat.restricted', true);
         $this->app['config']->set('privat.password', 'aaa');
 
-        $this->post('/privat', ["password" => "aaa"]);
+        $this->post('/privat', ["password" => "aaa"])
+            ->assertRedirect('/');
 
-        $this->assertRedirectedTo('/');
-
-        $this->visit('/')
-            ->dontSee(trans("privat::ui.form_title"));
+        $this->followingRedirects()
+            ->get('/')
+            ->assertDontSee(trans("privat::ui.form_title"));
     }
 
     /** @test */
@@ -43,8 +44,9 @@ class PrivatTest extends TestCase
     {
         $this->app['config']->set('privat.restricted', false);
 
-        $this->visit('/')
-            ->dontSee(trans("privat::ui.form_title"));
+        $this->followingRedirects()
+            ->get('/')
+            ->assertDontSee(trans("privat::ui.form_title"));
     }
 
 
@@ -53,8 +55,9 @@ class PrivatTest extends TestCase
     {
         $this->app['config']->set('privat.restricted', false);
 
-        $this->visit('/privat')
-            ->dontSee(trans("privat::ui.form_title"));
+        $this->followingRedirects()
+            ->get('/privat')
+            ->assertDontSee(trans("privat::ui.form_title"));
     }
 
     /** @test */
@@ -69,8 +72,9 @@ class PrivatTest extends TestCase
 
         $this->app['view']->addNamespace("test", __DIR__ . '/fixtures/views');
 
-        $this->visit('/')
-            ->see('Waiting page');
+        $this->followingRedirects()
+            ->get('/')
+            ->assertSee('Waiting page');
     }
 
     /** @test */
@@ -83,8 +87,9 @@ class PrivatTest extends TestCase
             ]
         ]);
 
-        $this->visit('/privat')
-            ->see(trans("privat::ui.form_title"));
+        $this->followingRedirects()
+            ->get('/privat')
+            ->assertSee(trans("privat::ui.form_title"));
     }
 
     /** @test */
@@ -97,8 +102,9 @@ class PrivatTest extends TestCase
             ]
         ]);
 
-        $this->visit('/')
-            ->dontSee('Waiting page');
+        $this->followingRedirects()
+            ->get('/')
+            ->assertDontSee('Waiting page');
     }
 
     /** @test */
@@ -111,7 +117,8 @@ class PrivatTest extends TestCase
             ]
         ]);
 
-        $this->visit('/privat_waiting')
-            ->dontSee(trans("privat::ui.form_title"));
+        $this->followingRedirects()
+            ->get('/privat_waiting')
+            ->assertDontSee(trans("privat::ui.form_title"));
     }
 }
