@@ -7,17 +7,13 @@ class PrivatController
 
     public function index()
     {
-        if (!config("privat.restricted")) {
-            return redirect("/");
-        }
-
         return view("privat::form");
     }
 
     public function store()
     {
         if (!config("privat.restricted")) {
-            return redirect("/");
+            return redirect()->intended('/');
         }
 
         if (config("privat.password") && request()->get("password") === config("privat.password")) {

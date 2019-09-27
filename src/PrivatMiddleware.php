@@ -14,8 +14,13 @@ class PrivatMiddleware
      */
     public function handle($request, \Closure $next)
     {
-        if(!$this->isPrivatUrl($request) && $this->isPrivatProtected($request)) {
+        $isPrivateProtected = $this->isPrivatProtected($request);
 
+        if(!$isPrivateProtected && $this->isPrivatUrl($request)) {
+            return redirect('/');
+        }
+
+        if($isPrivateProtected && !$this->isPrivatUrl($request)) {
             if($this->hasWaitingPage()) {
                 return redirect('/privat_waiting');
             }

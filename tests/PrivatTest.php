@@ -52,16 +52,6 @@ class PrivatTest extends TestCase
     }
 
     /** @test */
-    public function we_cant_see_the_privat_form_when_privat_is_off()
-    {
-        $this->app['config']->set('privat.restricted', false);
-
-        $this->followingRedirects()
-            ->get('/privat')
-            ->assertDontSee(trans("privat::ui.form_title"));
-    }
-
-    /** @test */
     public function we_get_the_waiting_page_when_privat_is_on_and_we_defined_a_waiting_page()
     {
         $this->app['config']->set([
@@ -163,5 +153,30 @@ class PrivatTest extends TestCase
         $this->get('http://some-host.com')->assertRedirect("/privat");
         $this->get('http://opened.test')->assertStatus(200);
         $this->get('http://opened2.test')->assertStatus(200);
+    }
+
+    /** @test */
+    public function we_redirect_to_homepage_on_a_privat_url_if_privat_is_off()
+    {
+        $this->app['config']->set([
+            'privat.restricted' => false,
+        ]);
+
+        $this->get('/privat')->assertRedirect("/");
+    }
+
+    /** @test */
+    public function we_redirect_to_homepage_on_a_privat_excluded_host()
+    {
+        $this->app['config']->set([
+            'privat' => [
+                'restricted' => true,
+                'except' => [
+                    'hosts' => 'opened.test'
+                ]
+            ]
+        ]);
+
+        $this->get('http://opened.test/privat')->assertRedirect("/");
     }
 }
