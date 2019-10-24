@@ -1,33 +1,36 @@
 <?php
 
-use Code16\Privat\PrivatMiddleware;
-use Laravel\BrowserKitTesting\TestCase as BaseTestCase;
+namespace Code16\Privat\Tests;
 
-abstract class TestCase extends BaseTestCase
-{
-    public function setUp()
-    {
-        parent::setUp();
+use Code16\Privat\PrivatMiddleware;
+use Code16\Privat\PrivatServiceProvider;
+use Illuminate\Contracts\Http\Kernel;
+use Illuminate\Support\Str;
+use Orchestra\Testbench\TestCase as BaseTestCase;
+
+abstract class TestCase extends BaseTestCase {
+
+    /**
+     * @param \Illuminate\Foundation\Application $app
+     *
+     * @return array
+     */
+    protected function getPackageProviders( $app ) {
+        return [ PrivatServiceProvider::class ];
     }
 
     /**
-     * Creates the application.
-     *
-     * @return \Illuminate\Foundation\Application
+     * @param \Illuminate\Foundation\Application $app
      */
-    public function createApplication()
-    {
-        $app = require __DIR__ . '/../vendor/laravel/laravel/bootstrap/app.php';
+    protected function getEnvironmentSetUp( $app ) {
+        $app['config']->set( 'app.key', Str::random( 32 ) );
 
-        $app->register(\Code16\Privat\PrivatServiceProvider::class);
-
-        $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
-
-        $app->make(Illuminate\Contracts\Http\Kernel::class)->pushMiddleware(
+        $app->make( Kernel::class )->pushMiddleware(
             PrivatMiddleware::class
         );
 
-        $app['config']->set('app.key', \Str::random(32));
+
+        $app['config']->set( 'app.key', \Str::random( 32 ) );
 
         return $app;
     }

@@ -14,8 +14,13 @@ class PrivatMiddleware
      */
     public function handle($request, \Closure $next)
     {
-        if(!$this->isPrivatUrl($request) && $this->isPrivatProtected($request)) {
+        $isPrivateProtected = $this->isPrivatProtected($request);
 
+        if(!$isPrivateProtected && $this->isPrivatUrl($request)) {
+            return redirect('/');
+        }
+
+        if($isPrivateProtected && !$this->isPrivatUrl($request)) {
             if($this->hasWaitingPage()) {
                 return redirect('/privat_waiting');
             }
@@ -62,12 +67,18 @@ class PrivatMiddleware
             return true;
         }
 
-        foreach ((array)config('privat.except') as $except) {
-            if ($except !== '/') {
-                $except = trim($except, '/');
+        foreach(explode(",", config('privat.except.hosts', "")) as $exceptedHost) {
+            if($request->getHttpHost() == $exceptedHost) {
+                return true;
+            }
+        }
+
+        foreach(explode(",", config('privat.except.urls', "")) as $exceptedUrl) {
+            if ($exceptedUrl !== '/') {
+                $exceptedUrl = trim($exceptedUrl, '/');
             }
 
-            if ($request->is($except)) {
+            if ($request->is($exceptedUrl)) {
                 return true;
             }
         }

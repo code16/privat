@@ -8,28 +8,27 @@ Privat is a very simple password protection for Laravel projects. It's useful fo
 
 ### Install with composer
 
-    composer require code16/privat
-
-### Add Privat Service Provider (except for Laravel 5.5+)
-
-Add the following line in the `providers` section of your `config/app.php` file:
-
-    \Code16\Privat\PrivatServiceProvider::class
+```sh
+composer require code16/privat
+```
 
 ### Add Privat middleware in your project
 
 Add the following middleware in your project configuration. 
 
-    \Code16\Privat\PrivatMiddleware::class
+```php
+\Code16\Privat\PrivatMiddleware::class
+```
 
 Typically, you can add it at the end of the `'web'` key in your `$middlewareGroups` array (in `app/Http/Kernel`).
-
 
 ### Set Privat config
 
 First create the privat config file:
 
-    php artisan vendor:publish --provider="Code16\Privat\PrivatServiceProvider"
+```sh
+php artisan vendor:publish --provider="Code16\Privat\PrivatServiceProvider"
+```
 
 And then edit the new `/config/privat.php` accordingly (nothing fancy); you can handle it with this keys in your `.env` file:
 
@@ -38,13 +37,26 @@ And then edit the new `/config/privat.php` accordingly (nothing fancy); you can 
 
 ### Exceptions
 
-The `except` config param is meant to contain an array of excluded urls (those urls won't be protected by Privat).
+The `except` config param is built like this:
+
+```php
+"except" => [
+    "hosts" => env("PRIVAT_EXCEPTED_HOSTS", ""),
+    "urls" => env("PRIVAT_EXCEPTED_URLS", "")
+]
+```
+
+The `urls` config key is meant to contain a comma separated list of URLs excluded from Privat; for instance `"/login,/admin"`.
+
+The `hosts` config key is the same, but for hosts (in case of a multi-hosts website).
 
 ### Waiting page
 
 If you need to present a public waiting page, here's how: set the waiting page view name in the `waiting_view` config key (in `config/privat.php`):
 
-    "waiting_view" => "demo.waiting"
+```php
+"waiting_view" => "demo.waiting"
+```
 
 From then, all requests without the Privat registration will be redirected to `/privat_waiting` which will render the configured view, except `/privat`, which will still present the Privat form.
 

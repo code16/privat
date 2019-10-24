@@ -11,7 +11,10 @@ return [
     // If you want a public waiting page, type its view name here
     "waiting_view" => false,
 
-    // Urls excluded
-    "except" => []
+    // Hosts and Urls excluded
+    "except" => [
+        "hosts" => env("PRIVAT_EXCEPTED_HOSTS", ""),
+        "urls" => env("PRIVAT_EXCEPTED_URLS", "")
+    ]
 
 ];
