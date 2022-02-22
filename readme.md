@@ -2,7 +2,7 @@
 
 [![Latest Stable Version](https://poser.pugx.org/code16/privat/v/stable?format=flat-square)](https://packagist.org/packages/code16/privat)
 [![MIT Licensed](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
-![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/code16/privat/run-tests?label=tests)
+![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/code16/privat/Tests?label=tests)
 [![Total Downloads](https://img.shields.io/packagist/dt/code16/privat.svg?style=flat-square)](https://packagist.org/packages/code16/privat)
 
 Privat is a very simple password protection for Laravel projects. It's useful for websites in a staging state.
