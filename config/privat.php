@@ -11,7 +11,7 @@ return [
     'middleware_groups' => env('PRIVAT_MIDDLEWARE_GROUP', 'web'),
 
     // If you want a public waiting page, type its view name here
-    'waiting_view' => false,
+    'waiting_view' => env('PRIVAT_WAITING_VIEW', false),
 
     // Hosts and Urls excluded
     'except' => [
