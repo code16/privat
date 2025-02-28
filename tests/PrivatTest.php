@@ -1,182 +1,106 @@
 <?php
 
-namespace Code16\Privat\Tests;
-
+use Code16\Privat\PrivatMiddleware;
+use Code16\Privat\Tests\TestCase;
 use Illuminate\Support\Facades\Route;
 
-class PrivatTest extends TestCase
-{
+uses(TestCase::class);
 
-    /** @test */
-    public function we_get_the_form_page_when_privat_is_on()
-    {
-        $this->app['config']->set('privat.restricted', true);
+beforeEach(function () {
+    config()->set('privat.enabled', true);
+});
 
-        $this->followingRedirects()
-            ->get('/')
-            ->assertSee(trans("privat::ui.form_title"));
-    }
+test('we get the form page when privat is on', function () {
+    $this->get('/')->assertRedirect('/privat');
+});
 
-    /** @test */
-    public function an_incorrect_password_send_us_back_to_the_form_page()
-    {
-        $this->app['config']->set('privat.restricted', true);
-        $this->app['config']->set('privat.password', 'aaa');
+test('an incorrect password send us back to the form page', function () {
+    config()->set('privat.password', 'aaa');
 
-        $this->post('/privat', ["password" => "bbb"])
-            ->assertRedirect('/privat');
-    }
+    $this->post('/privat', ['password' => 'bbb'])
+        ->assertRedirect('/privat');
+});
 
-    /** @test */
-    public function we_can_access_the_site_with_the_correct_password()
-    {
-        $this->app['config']->set('privat.restricted', true);
-        $this->app['config']->set('privat.password', 'aaa');
+test('we can access the site with the correct password', function () {
+    config()->set('privat.password', 'aaa');
 
-        $this->post('/privat', ["password" => "aaa"])
-            ->assertRedirect('/');
+    $this->post('/privat', ['password' => 'aaa'])
+        ->assertRedirect('/');
 
-        $this->followingRedirects()
-            ->get('/')
-            ->assertDontSee(trans("privat::ui.form_title"));
-    }
+    $this->get('/')->assertStatus(200);
+});
 
-    /** @test */
-    public function we_can_access_the_website_when_privat_is_off()
-    {
-        $this->app['config']->set('privat.restricted', false);
+test('we can access the website when privat is off', function () {
+    config()->set('privat.enabled', false);
 
-        $this->followingRedirects()
-            ->get('/')
-            ->assertDontSee(trans("privat::ui.form_title"));
-    }
+    $this->get('/')->assertStatus(200);
+});
 
-    /** @test */
-    public function we_get_the_waiting_page_when_privat_is_on_and_we_defined_a_waiting_page()
-    {
-        $this->app['config']->set([
-            'privat' => [
-                'restricted' => true,
-                'waiting_view' => 'test::waiting'
-            ]
-        ]);
+test('we get the waiting page when privat is on and we defined a waiting page', function () {
+    config()->set('privat.waiting_view', 'test::waiting');
 
-        $this->app['view']->addNamespace("test", __DIR__ . '/fixtures/views');
+    $this->app['view']->addNamespace('test', __DIR__ . '/fixtures/views');
 
-        $this->followingRedirects()
-            ->get('/')
-            ->assertSee('Waiting page');
-    }
+    $this->followingRedirects()
+        ->get('/')
+        ->assertSee('Waiting page');
+});
 
-    /** @test */
-    public function we_get_the_privat_form_even_with_a_waiting_page_on_the_privat_url()
-    {
-        $this->app['config']->set([
-            'privat' => [
-                'restricted' => true,
-                'waiting_view' => 'test::waiting'
-            ]
-        ]);
+test('we get the privat form even with a waiting page on the privat url', function () {
+    config()->set('privat.waiting_view', 'test::waiting');
 
-        $this->followingRedirects()
-            ->get('/privat')
-            ->assertSee(trans("privat::ui.form_title"));
-    }
+    $this->get('/privat')
+        ->assertSee(trans('privat::ui.form_title'));
+});
 
-    /** @test */
-    public function we_dont_get_the_waiting_page_when_privat_is_off()
-    {
-        $this->app['config']->set([
-            'privat' => [
-                'restricted' => false,
-                'waiting_view' => 'test::waiting'
-            ]
-        ]);
+test('we dont get the waiting page when privat is off', function () {
+    config()->set('privat.enabled', false);
+    config()->set('privat.waiting_view', 'test::waiting');
 
-        $this->followingRedirects()
-            ->get('/')
-            ->assertDontSee('Waiting page');
-    }
+    $this->get('/')
+        ->assertStatus(200);
+});
 
-    /** @test */
-    public function we_cant_reach_get_the_waiting_page_when_privat_is_off()
-    {
-        $this->app['config']->set([
-            'privat' => [
-                'restricted' => false,
-                'waiting_view' => 'test::waiting'
-            ]
-        ]);
+test('we cant reach get the waiting page when privat is off', function () {
+    config()->set('privat.enabled', false);
+    config()->set('privat.waiting_view', 'test::waiting');
 
-        $this->followingRedirects()
-            ->get('/privat_waiting')
-            ->assertDontSee(trans("privat::ui.form_title"));
-    }
+    $this->get('/privat_waiting')
+        ->assertRedirect('/');
+});
 
-    /** @test */
-    public function we_can_exclude_urls_from_privat()
-    {
-        $this->app['config']->set([
-            'privat' => [
-                'restricted' => true,
-                'except' => [
-                    'urls' => '/test,/test2'
-                ]
-            ]
-        ]);
+test('we can exclude urls from privat', function () {
+    config()->set('privat.except.urls', '/test,/test2');
 
-        Route::get('/test', function() { return ""; });
-        Route::get('/test2', function() { return ""; });
-        Route::get('/test3', function() { return ""; });
+    Route::middleware(PrivatMiddleware::class)->get('/test', fn () => '');
+    Route::middleware(PrivatMiddleware::class)->get('/test2', fn () => '');
+    Route::middleware(PrivatMiddleware::class)->get('/test3', fn () => '');
 
-        $this->get('/')->assertRedirect('/privat');
-        $this->get('/test')->assertStatus(200);
-        $this->get('/test2')->assertStatus(200);
-        $this->get('/test3')->assertRedirect('/privat');
-    }
+    $this->get('/')->assertRedirect('/privat');
+    $this->get('/test')->assertStatus(200);
+    $this->get('/test2')->assertStatus(200);
+    $this->get('/test3')->assertRedirect('/privat');
+});
 
-    /** @test */
-    public function we_can_exclude_hosts_from_privat()
-    {
-        $this->app['config']->set([
-            'privat' => [
-                'restricted' => true,
-                'except' => [
-                    'hosts' => 'opened.test,opened2.test'
-                ]
-            ]
-        ]);
+test('we can exclude hosts from privat', function () {
+    config()->set('privat.except.hosts', 'opened.test,opened2.test');
 
-        Route::get('/', function() { return ""; });
+    Route::middleware(PrivatMiddleware::class)->get('/', fn () => '');
 
-        $this->get('http://localhost')->assertRedirect("/privat");
-        $this->get('http://some-host.com')->assertRedirect("/privat");
-        $this->get('http://opened.test')->assertStatus(200);
-        $this->get('http://opened2.test')->assertStatus(200);
-    }
+    $this->get('http://localhost')->assertRedirect('/privat');
+    $this->get('http://some-host.com')->assertRedirect('/privat');
+    $this->get('http://opened.test')->assertStatus(200);
+    $this->get('http://opened2.test')->assertStatus(200);
+});
 
-    /** @test */
-    public function we_redirect_to_homepage_on_a_privat_url_if_privat_is_off()
-    {
-        $this->app['config']->set([
-            'privat.restricted' => false,
-        ]);
+test('we redirect to homepage on a privat url if privat is off', function () {
+    config()->set('privat.enabled', false);
 
-        $this->get('/privat')->assertRedirect("/");
-    }
+    $this->get('/privat')->assertRedirect('/');
+});
 
-    /** @test */
-    public function we_redirect_to_homepage_on_a_privat_excluded_host()
-    {
-        $this->app['config']->set([
-            'privat' => [
-                'restricted' => true,
-                'except' => [
-                    'hosts' => 'opened.test'
-                ]
-            ]
-        ]);
+test('we redirect to homepage on a privat excluded host', function () {
+    config()->set('privat.except.hosts', 'opened.test');
 
-        $this->get('http://opened.test/privat')->assertRedirect("/");
-    }
-}
+    $this->get('http://opened.test/privat')->assertRedirect('/');
+});

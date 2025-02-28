@@ -4,26 +4,25 @@ namespace Code16\Privat\Controllers;
 
 class PrivatController
 {
-
-    public function index()
+    public function create()
     {
-        return view("privat::form");
+        return view('privat::form');
     }
 
     public function store()
     {
-        if (!config("privat.restricted")) {
+        if (!config('privat.enabled')) {
             return redirect()->intended('/');
         }
 
-        if (config("privat.password") && request()->get("password") === config("privat.password")) {
-            session()->put("privat_key", true);
+        if (config('privat.password') && request()->get('password') === config('privat.password')) {
+            session()->put('privat_key', true);
 
             return redirect()->intended('/');
         }
 
         return redirect()
-            ->to("/privat")
-            ->with("message", trans("privat::ui.invalid_password_message"));
+            ->to('/privat')
+            ->with('error', trans('privat::ui.invalid_password_message'));
     }
 }
