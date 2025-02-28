@@ -2,34 +2,29 @@
 
 namespace Code16\Privat\Tests;
 
-use Code16\Privat\PrivatMiddleware;
 use Code16\Privat\PrivatServiceProvider;
-use Illuminate\Contracts\Http\Kernel;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Route;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-    /**
-     * @param \Illuminate\Foundation\Application $app
-     * @return array
-     */
+        config()->set('app.key', 'base64:'.base64_encode(random_bytes(32)));
+        config()->set('privat.middleware_groups', 'web');
+    }
+
     protected function getPackageProviders($app)
     {
         return [PrivatServiceProvider::class];
     }
 
-    /**
-     * @param \Illuminate\Foundation\Application $app
-     */
-    protected function getEnvironmentSetUp($app)
+    protected function defineEnvironment($app)
     {
-        $app['config']->set('app.key', Str::random(32));
-
-        $app->make(Kernel::class)->pushMiddleware(
-            PrivatMiddleware::class
-        );
+        Route::middleware('web')->group(function () {
+            Route::get('/', fn () => 'ok');
+        });
     }
-
 }

@@ -2,26 +2,20 @@
 
 namespace Code16\Privat;
 
+use Closure;
+
 class PrivatMiddleware
 {
-
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
-     */
-    public function handle($request, \Closure $next)
+    public function handle($request, Closure $next)
     {
-        $isPrivateProtected = $this->isPrivatProtected($request);
+        $isPrivatProtected = $this->isPrivatProtected($request);
 
-        if(!$isPrivateProtected && $this->isPrivatUrl($request)) {
+        if (!$isPrivatProtected && $this->isPrivatUrl($request)) {
             return redirect('/');
         }
 
-        if($isPrivateProtected && !$this->isPrivatUrl($request)) {
-            if($this->hasWaitingPage()) {
+        if ($isPrivatProtected && !$this->isPrivatUrl($request)) {
+            if ($this->hasWaitingPage()) {
                 return redirect('/privat_waiting');
             }
 
@@ -38,42 +32,32 @@ class PrivatMiddleware
         return $request->is('privat');
     }
 
-    /**
-     * @param $request
-     * @return bool
-     */
-    protected function isPrivatProtected($request)
+    protected function isPrivatProtected($request): bool
     {
-        return config("privat.restricted")
-            && !session()->has("privat_key")
+        return config('privat.enabled')
+            && !session()->has('privat_key')
             && !$this->shouldPassThrough($request);
     }
 
-    /**
-     * @return bool
-     */
-    protected function hasWaitingPage()
+    protected function hasWaitingPage(): bool
     {
-        return !!config("privat.waiting_view");
+        return !!config('privat.waiting_view');
     }
 
-    /**
-     * @param $request
-     * @return bool
-     */
-    protected function shouldPassThrough($request)
+    protected function shouldPassThrough($request): bool
     {
-        if($this->hasWaitingPage() && $request->is("privat_waiting")) {
+        if ($this->hasWaitingPage() && $request->is('privat_waiting')) {
             return true;
         }
 
-        foreach(explode(",", config('privat.except.hosts', "")) as $exceptedHost) {
-            if($request->getHttpHost() == $exceptedHost) {
-                return true;
-            }
+        if (array_any(
+            explode(',', config('privat.except.hosts', '')),
+            fn($exceptedHost) => $request->getHttpHost() == $exceptedHost
+        )) {
+            return true;
         }
 
-        foreach(explode(",", config('privat.except.urls', "")) as $exceptedUrl) {
+        foreach (explode(',', config('privat.except.urls', '')) as $exceptedUrl) {
             if ($exceptedUrl !== '/') {
                 $exceptedUrl = trim($exceptedUrl, '/');
             }
