@@ -7,7 +7,7 @@
 
 Privat is a very simple password protection for Laravel projects. It's useful for websites in a staging state.
 
-![Screenshot](https://imgur.com/a/UsJtuF2)
+![Screenshot](screenshot.png)
 
 ## Usage
 
