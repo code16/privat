@@ -19,6 +19,10 @@ jobs:
             env:
               LARAVEL: 12.*
               TESTBENCH: 10.*
+          - php: 8.5
+            env:
+              LARAVEL: 12.*
+              TESTBENCH: 10.*
     env: ${{ matrix.env }}
     steps:
       - uses: actions/checkout@v2
