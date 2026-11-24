@@ -19,7 +19,7 @@ class PrivatMiddleware
                 return redirect('/privat_waiting');
             }
 
-            session()->put('url.intended', $request->url());
+            session()->put('url.intended', $request->fullUrl());
 
             return redirect('/privat');
         }

@@ -104,3 +104,14 @@ test('we redirect to homepage on a privat excluded host', function () {
 
     $this->get('http://opened.test/privat')->assertRedirect('/');
 });
+
+test('we keep the query string when redirecting to the intended url', function () {
+    config()->set('privat.password', 'aaa');
+
+    Route::middleware(PrivatMiddleware::class)->get('/page', fn () => '');
+
+    $this->get('/page?baz=1&foo=bar')->assertRedirect('/privat');
+
+    $this->post('/privat', ['password' => 'aaa'])
+        ->assertRedirect('/page?baz=1&foo=bar');
+});
